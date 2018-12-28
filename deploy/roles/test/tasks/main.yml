@@ -12,7 +12,7 @@
     return_content: yes
     status_code: 201
     body: {
-      "user": "{{user_name}}",
+      "name": "{{user_name}}",
       "pwd": "{{pwd}}"
     }
   register: webpage2

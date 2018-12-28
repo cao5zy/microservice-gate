@@ -45,13 +45,12 @@
     path: "{{login_service_root}}/conf.d"
     state: directory
 
-
 - name: configure nginx
   template:
     src: login.conf.template
     dest: "{{login_service_root}}/conf.d/login.conf"
 
-- name: deploy the nginx server for integration
+- name: deploy the nginx server
   docker_container:
     name: "{{login_service}}"
     image: "{{login_service_image_name}}:latest"
