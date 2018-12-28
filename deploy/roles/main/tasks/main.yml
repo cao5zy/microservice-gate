@@ -8,6 +8,7 @@
   synchronize:
     src: "./src/"
     dest: "{{login_service_root}}"
+    checksum: no
     
 - name: init login service image file folder
   file:
@@ -61,6 +62,5 @@
       - "{{login_service_root}}:/lua_app:Z"
       - "{{login_service_root}}/logs:/usr/local/openresty/nginx/logs:Z"
       - "{{login_service_root}}/conf.d:/usr/local/openresty/nginx/conf.d:Z"
-  when: login_service_debug=="false" 
 
 ...

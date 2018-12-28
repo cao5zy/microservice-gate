@@ -16,5 +16,9 @@ server {
              set 	$auth_db {{auth_db_ip}};
        	     set 	$auth_db_port {{auth_db_port}};
        	     rewrite_by_lua_file		/lua_app/signup.lua;
+
+             error_log logs/location.error.log debug;
+	     access_log logs/location.access.log;
+	  	     allow	   all;
        }
 }

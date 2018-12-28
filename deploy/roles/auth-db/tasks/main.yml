@@ -4,7 +4,7 @@
     image: "mongo:4.0"
     state: started
     exposed: "{{auth_db_port}}"
-    entrypoint: "mongod --port={{auth_db_port}} --host=0.0.0.0"
+    entrypoint: "mongod --port={{auth_db_port}} --bind_ip=0.0.0.0"
   register: auth_db_result
 
 - debug: var=auth_db_result.ansible_facts.docker_container.NetworkSettings.IPAddress
