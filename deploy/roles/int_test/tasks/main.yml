@@ -1,0 +1,114 @@
+---
+
+- name: int test for register account
+  uri:
+    url: "http://{{ public_host }}:{{public_port}}/auth/register"
+    method: POST
+    body_format: json
+    body: {
+    "name": "alancao",
+    "pwd": "abc"
+    }
+    
+      
+      
+- name: int test for login and get token
+  uri:
+    url: "http://{{ public_host}}:{{public_port}}/auth/login"
+    method: POST
+    body_format: json
+    return_content: yes
+    body: {
+    "name": "alancao",
+    "pwd": "abc"
+    }
+  register: login_service_result
+
+- set_fact:
+    login_service_token: "{{login_service_result.content}}"
+
+- debug: var=login_service_token
+
+- name: int test for create interface instance
+  uri:
+    url: "http://{{ public_host}}:{{public_port}}/_api/interface_service/interface_service"
+    body_format: json
+    method: POST
+    status_code: 201
+    headers:
+      name: alancao
+      token: "{{login_service_token}}"
+    body: {
+    "project": "alancao",
+    "deployConfig": {
+      "instanceName": "test1",
+      "imageName": "alancao/image1",
+      "imageTag": "latest",
+      "volume": "/working",
+      "canRestart": true,
+      "canRecreate": true,
+      "instanceType": "microService",
+      "entryPoint": "node index.js",
+      "port": 8900,
+      "description": "this is an end to end test",
+      "target": "microService",
+      "awsSetting": null
+    },
+    "serviceInterface": {
+      "name": "test-service",
+      "methods": [
+      {
+        "name": "add",
+        "action": "ALL"
+      },
+      ],
+      "description": "this is an end to end test instance"
+    },
+    "config": {
+      "values": [
+      {
+        "name": "val1",
+        "type": "string",
+        "value": "hello"
+      },
+      {
+        "name": "val2",
+        "type": "number",
+        "value": 323
+      }
+      ]
+    },
+    "dependedServers": [
+    {
+      "name": "depended_server_name",
+      "localName": "localName_in_your_config",
+      "wireMoke": false
+    }
+    ]
+    }
+
+- name: test for get list
+  uri:
+    url: "http://{{ public_host}}:{{public_port}}/_api/interface_service/interface_service"
+    method: GET
+    return_content: yes
+    headers:
+      name: alancao
+      token: "{{ login_service_token}}"
+  register: login_service_list_result
+
+- debug: var=login_service_list_result.content
+
+- name: test for invalide access
+  uri:
+    url: "http://{{ public_host}}:{{public_port}}/_api/interface_service/interface_service"
+    method: GET
+    return_content: yes
+    status_code: 401
+    headers:
+      name: alancao1
+      token: "{{ login_service_token}}"
+  register: login_service_invalid_access_result
+
+- debug: var=login_service_invalid_access_result
+...

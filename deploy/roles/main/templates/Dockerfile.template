@@ -1,0 +1,16 @@
+FROM {{openresty_image_name}}
+
+
+ENV LUAMG_DOWNLOAD=lua_mongo_install
+
+# copy lua-resty-mongo source code
+# install lua-resty-mongo
+WORKDIR /${LUAMG_DOWNLOAD}
+COPY ./lua-resty-mongol/ /${LUAMG_DOWNLOAD}
+RUN  make && make install
+
+# clean
+RUN rm -rf /${LUAMG_DOWNLOAD}
+
+COPY ./nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
+

@@ -1,0 +1,16 @@
+---
+
+- name: test login with headers
+  uri:
+    url: "{{login_service_test_url}}"
+    method: GET
+    return_content: yes
+    headers:
+      name: xyz
+      token: "{{ auth_service_login_result.stdout }}"
+  register: webpage2
+
+- debug: var=webpage2.content
+
+
+...
