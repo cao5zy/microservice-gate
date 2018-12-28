@@ -1,13 +1,20 @@
 ---
 
-- name: test login with headers
+- set_fact:
+    user_name: "alan"
+    pwd: "123"
+    
+- name: sign up
   uri:
-    url: "{{login_service_test_url}}"
-    method: GET
+    url: "{{login_service_test_url}}/signup"
+    method: POST
+    body_format: json
     return_content: yes
-    headers:
-      name: xyz
-      token: "{{ auth_service_login_result.stdout }}"
+    status_code: 201
+    body: {
+      "user": "{{user_name}}",
+      "pwd": "{{pwd}}"
+    }
   register: webpage2
 
 - debug: var=webpage2.content
