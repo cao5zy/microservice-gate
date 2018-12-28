@@ -30,30 +30,17 @@
     src: "./lua-resty-mongol"
     dest: "{{login_service_image_path}}"
     
-- name: remove the container
-  docker_container:
-    name: "{{login_service}}"
-    state: absent
-  when: login_service_image_rebuild|default("false")=="true"
-
-- name: remove the login service image
-  docker_image:
-    name: "{{login_service_image_name}}"
-    state: absent
-  when: login_service_image_rebuild|default("false")=="true"
-
-    
 - name: build the login_service image
   docker_image:
     name: "{{login_service_image_name}}"
     path: "{{login_service_image_path}}"
 
-- name: make sure the logs folder is there
+- name: init logs folder 
   file:
     path: "{{login_service_root}}/logs"
     state: directory
 
-- name: make sure the conf folder is there
+- name: init conf folder 
   file:
     path: "{{login_service_root}}/conf.d"
     state: directory
@@ -70,40 +57,11 @@
     image: "{{login_service_image_name}}:latest"
     ports:
       - "{{public_port}}:{{public_port}}"
-    links:
-      - "{{auth_db}}:{{auth_db}}"
-      - "{{auth_service}}:{{auth_service}}"
-      - "{{interface_service}}:{{interface_service}}"
-      - "{{web_app}}:{{web_app}}"
-      - "{{dxc_site}}:{{dxc_site}}"
-      - "{{interface_service_data}}:{{interface_service_data}}"
-      - "{{interfacedef_get_service}}:{{interfacedef_get_service}}"
-      - "{{users_service}}:{{users_service}}"
-      - "{{users_query_service}}:{{users_query_service}}"
     restart: yes
-    recreate: yes
     volumes:
       - "{{login_service_root}}:/lua_app:Z"
       - "{{login_service_root}}/logs:/usr/local/openresty/nginx/logs:Z"
       - "{{login_service_root}}/conf.d:/usr/local/openresty/nginx/conf.d:Z"
   when: login_service_debug=="false" 
-
-- name: deploy the nginx server for integration
-  docker_container:
-    name: "{{login_service}}"
-    image: "{{login_service_image_name}}:latest"
-    ports:
-      - "{{public_port}}:{{public_port}}"
-    links:
-      - "{{auth_db}}:{{auth_db}}"
-      - "{{auth_service}}:{{auth_service}}"
-    restart: yes
-    recreate: yes
-    volumes:
-      - "{{login_service_root}}:/lua_app:Z"
-      - "{{login_service_root}}/logs:/usr/local/openresty/nginx/logs:Z"
-      - "{{login_service_root}}/conf.d:/usr/local/openresty/nginx/conf.d:Z"
-  when: login_service_debug=="true" 
-
 
 ...
