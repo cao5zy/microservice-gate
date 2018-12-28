@@ -1,5 +1,5 @@
 ---
-
+public_prefix: ""
 public_port: 9005
 public_host: "130.175.64.6"
 login_service_image_rebuild: "false"
