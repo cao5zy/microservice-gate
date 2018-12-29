@@ -1,7 +1,8 @@
 local p = "/usr/local/openresty/lualib/"
+local p1 = "/lua_app/"
 local m_package_path = package.path
-package.path = string.format("%s?.lua;%s?/init.lua;%s",
-	        p, p, m_package_path)
+package.path = string.format("%s?.lua;%s?/init.lua;%s?.lua;%s",
+	        p, p, p1, m_package_path)
 
 local mongo = require("resty.mongol");
 local resty_sha1 = require("resty.sha1");
@@ -92,7 +93,9 @@ end
 local function signup(name, pwd)
       local conn = mongo:new()
       err, ok = conn:connect(ngx.var.auth_db, ngx.var.auth_db_port)
+      local util = require('util')
 
+      
       if err then
       	 ngx.log(ngx.ERR, err)
       end
