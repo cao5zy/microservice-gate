@@ -101,8 +101,10 @@ local function signup(name, pwd)
 
       if n == nil then ngx.log(ngx.ERR, err) end
 
-      return "OK"
+      return 1
 
 end
 
-ngx.say(signup(post_args("name"), post_args("pwd")))
+ngx.status = 201
+ngx.print(signup(post_args("name"), post_args("pwd")))
+ngx.exit(201)
