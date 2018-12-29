@@ -81,7 +81,7 @@ local post_args = get_post_args()
 local query_args = get_query_args()
 local header_args = get_header_args()
 
-local function get_token_by_name(name)
+local function signin(name, pwd)
       local conn = mongo:new()
       err, ok = conn:connect(ngx.var.auth_db, ngx.var.auth_db_port)
 
@@ -95,8 +95,8 @@ local function get_token_by_name(name)
 
       local db = conn:new_db_handle("authdb")
       local r = db:auth("","")
-      if not r then ngx.log(ngx.ERR, "auth failed") end
-      local col = db:get_col("user")
+
+      local col = db:get_col("users")
       local usr = col:find_one({name=name})
 
       return usr["token"]

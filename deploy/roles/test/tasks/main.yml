@@ -4,7 +4,7 @@
     user_name: "alan"
     pwd: "123"
     
-- name: sign up
+- name: sign up test
   uri:
     url: "{{login_service_test_url}}/signup"
     method: POST
@@ -15,9 +15,24 @@
       "name": "{{user_name}}",
       "pwd": "{{pwd}}"
     }
-  register: webpage2
+  register: signup
 
-- debug: var=webpage2.content
+- debug: var=signup.content
+
+- name: sign in test
+  uri:
+    url: "{{login_service_test_url}}/signin"
+    method: GET
+    body_format: json
+    return_content: yes
+    status_code: 201
+    body: {
+      "name": "{{user_name}}",
+      "pwd": "{{pwd}}"
+    }
+  register: signin
+
+- debug: var=signin.content
 
 
 ...
