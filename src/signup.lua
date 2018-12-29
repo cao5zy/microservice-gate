@@ -95,12 +95,9 @@ local function signup(name, pwd)
 
       local db = conn:new_db_handle("authdb")
       local ok, err = db:auth("","")
-      if ok == nil then ngx.log(ngx.ERR, "auth failed") end
-      if ok == nil then ngx.log(ngx.ERR, err) end
 
-      local col = db:get_col("useers")
-      local bson1 = {name="name", pwd="pwd"}
-      local n, err = col:insert({bson1},0,0)
+      local col = db:get_col("users")
+      local n, err = col:insert({{name=name, pwd=pwd}})
 
       if n == nil then ngx.log(ngx.ERR, err) end
 
