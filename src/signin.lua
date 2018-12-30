@@ -1,85 +1,15 @@
 local p = "/usr/local/openresty/lualib/"
+local p1 = "/lua_app/"
 local m_package_path = package.path
-package.path = string.format("%s?.lua;%s?/init.lua;%s",
-	        p, p, m_package_path)
+package.path = string.format("%s?.lua;%s?/init.lua;%s?.lua;%s",
+	        p, p, p1, m_package_path)
 
 local mongo = require("resty.mongol");
-local json = require("cjson");
+local util = require("util");
 
 ngx.header.content_type = "application/json";
 
 ngx.req.read_body();
-
-local function has_key(rs, key)
-      for k,v in pairs(rs)
-      do
-	if k == key then
-	   return true
-	end
-      end
-
-      return false
-end
-local function get_post_args()
-      local args = ngx.req.get_body_data()
-
-      if args then
-          local rs = json.decode(args)
-
-           return function (name)
-		 if has_key(rs, name) then
-		    return rs[name]
-		 else
-		    return nil
-		 end	 
-
-	   end
-      else
-          return function(name)
-	       return nil
-	  end
-      end
-end
-
-local function get_query_args()
-    local args = ngx.req.get_uri_args()
-
-    if args then
-        return function(name)
-	    if has_key(args, name) then
-	        return args[name]
-	    else
-	        return nil
-            end
-	end
-    else
-        return function(name)
-	    return nil
-	end
-    end
-end
-
-local function get_header_args()
-    local args = ngx.req.get_headers()
-
-    if args then
-        return function(name)
-	    if has_key(args, name) then
-	        return args[name]
-	    else
-	        return nil
-	    end
-	end
-    else
-        return function(name)
-	    return nil
-	end
-    end
-end
-
-local post_args = get_post_args()
-local query_args = get_query_args()
-local header_args = get_header_args()
 
 local function signin(name, pwd)
       local conn = mongo:new()
@@ -97,11 +27,11 @@ local function signin(name, pwd)
       local r = db:auth("","")
 
       local col = db:get_col("users")
-      local usr = col:find_one({name=name})
+      local usr = col:find_one({name=name, pwd=util.getsha(pwd)})
 
-      return usr["token"]
+      return usr
 end
 
-
-ngx.say(get_token_by_name(post_args("name") or query_args("name") or header_args("name"))
-    == (post_args("token") or query_args("token") or header_args("token")))
+ngx.status = 200
+ngx.print(signin(util.post_args('name'), util.post_args('pwd')))
+ngx.exit(200)
