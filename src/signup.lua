@@ -35,5 +35,5 @@ local function signup(name, pwd)
 end
 
 ngx.status = 201
-signup(util.post_args('name'), util.post_args('pwd'))
+signup(util.post_args('name'), util.getsha(util.post_args('pwd')))
 ngx.exit(201)

@@ -6,6 +6,7 @@ package.path = string.format("%s?.lua;%s?/init.lua;%s?.lua;%s",
 
 local mongo = require("resty.mongol");
 local util = require("util");
+local json = require('cjson');
 
 ngx.header.content_type = "application/json";
 
@@ -27,13 +28,17 @@ local function signin(name, pwd)
       local r = db:auth("","")
 
       local col = db:get_col("users")
-      local usr = col:find({name=name})
-
       ngx.log(ngx.ERR, name..pwd)
-      
-      return usr
+      local usr = col:find_one({name=name, pwd=pwd})
+
+      if usr then
+          return json.encode({name=usr['name'], pwd=usr['pwd']})
+      else
+	  return nil
+      end
+
 end
 
 ngx.status = 200
-ngx.print(signin(util.post_args('name'), util.getsha(util.post_args('pwd'))))
+ngx.say(signin(util.post_args('name'), util.getsha(util.post_args('pwd'))))
 ngx.exit(200)
