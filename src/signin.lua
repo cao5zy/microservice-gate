@@ -8,7 +8,7 @@ local mongo = require("resty.mongol");
 local util = require("util");
 local json = require('cjson');
 
-ngx.header.content_type = "application/json";
+ngx.header.content_type = "text/plain";
 
 ngx.req.read_body();
 
@@ -32,8 +32,14 @@ local function signin(name, pwd)
       local usr = col:find_one({name=name, pwd=pwd})
 
 
+      function insert_token(token)
+          local tokens = db:get_col("tokens")
+	  tokens:insert({{token=token, expdate=util.expdate()}})
+
+          return token
+      end
       if usr then
-          return usr['name']..'_'..util.gentoken(usr['pwd'])
+          return insert_token(usr['name']..'$$'..util.gentoken(usr['pwd']))
       else
 	  return nil
       end

@@ -78,4 +78,8 @@ function util.gentoken(seed)
     return util.getsha(seed .. os.date("%Y-%m-%d%H:%M:%S"))
 end
 
+function util.expdate()
+    return os.time() + 6000    
+end
+
 return util
