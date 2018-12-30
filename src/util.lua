@@ -74,4 +74,8 @@ function util.post_args(key)
       end
 end
 
+function util.gentoken(seed)
+    return util.getsha(seed .. os.date("%Y-%m-%d%H:%M:%S"))
+end
+
 return util

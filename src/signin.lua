@@ -31,8 +31,9 @@ local function signin(name, pwd)
       ngx.log(ngx.ERR, name..pwd)
       local usr = col:find_one({name=name, pwd=pwd})
 
+
       if usr then
-          return json.encode({name=usr['name'], pwd=usr['pwd']})
+          return usr['name']..'_'..util.gentoken(usr['pwd'])
       else
 	  return nil
       end
@@ -40,5 +41,5 @@ local function signin(name, pwd)
 end
 
 ngx.status = 200
-ngx.say(signin(util.post_args('name'), util.getsha(util.post_args('pwd'))))
+ngx.print(signin(util.post_args('name'), util.getsha(util.post_args('pwd'))))
 ngx.exit(200)
