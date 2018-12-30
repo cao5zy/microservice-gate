@@ -26,9 +26,8 @@ local function signup(name, pwd)
 
       local db = conn:new_db_handle("authdb")
       local ok, err = db:auth("","")
-
       local col = db:get_col("users")
-      local n, err = col:insert({{name=name, pwd=util.getsha(pwd)}})
+      local n, err = col:insert({{name=name, pwd=pwd}})
 
       if n == nil then ngx.log(ngx.ERR, err) end
 
@@ -36,5 +35,5 @@ local function signup(name, pwd)
 end
 
 ngx.status = 201
-signup(util.post_args('user'), util.post_args('pwd'))
+signup(util.post_args('name'), util.post_args('pwd'))
 ngx.exit(201)

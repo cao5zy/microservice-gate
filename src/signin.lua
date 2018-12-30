@@ -27,11 +27,13 @@ local function signin(name, pwd)
       local r = db:auth("","")
 
       local col = db:get_col("users")
-      local usr = col:find_one({name=name, pwd=util.getsha(pwd)})
+      local usr = col:find({name=name})
 
+      ngx.log(ngx.ERR, name..pwd)
+      
       return usr
 end
 
 ngx.status = 200
-ngx.print(signin(util.post_args('name'), util.post_args('pwd')))
+ngx.print(signin(util.post_args('name'), util.getsha(util.post_args('pwd'))))
 ngx.exit(200)
