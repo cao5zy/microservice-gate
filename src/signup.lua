@@ -84,11 +84,6 @@ local post_args = get_post_args()
 local query_args = get_query_args()
 local header_args = get_header_args()
 
-local function getsha(pwd)
-      local sha1 = resty_sha1:new()
-      sha1:update(pwd)
-      return str.to_hex(sha1:final())
-end
 
 local function signup(name, pwd)
       local conn = mongo:new()
@@ -108,7 +103,7 @@ local function signup(name, pwd)
       local ok, err = db:auth("","")
 
       local col = db:get_col("users")
-      local n, err = col:insert({{name=name, pwd=getsha(pwd)}})
+      local n, err = col:insert({{name=name, pwd=util.getsha(pwd)}})
 
       if n == nil then ngx.log(ngx.ERR, err) end
 
