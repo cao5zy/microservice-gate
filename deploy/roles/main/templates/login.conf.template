@@ -41,8 +41,13 @@ server {
              gzip_types text/plain application/x-javascript text/css application/xml text/javascript application/javascript image/jpeg image/gif image/png;
 	     gzip_vary on;
 
-             root /test_html;
+             root /lua_app;
              index index.html;
+
+             error_log logs/test_html.error.log debug;
+       	     access_log logs/test_html.access.log;
+       	     allow	   all;
+
        }
 
 }

@@ -34,5 +34,13 @@
 
 - debug: var=signin.content
 
+- name: test validation
+  uri:
+    url: "{{login_service_test_url}}/test_html/index.html"
+    method: GET
+    return_content: yes
+    status_code: 200
+  register: test_val
 
+- debug: var=test_val.content
 ...
