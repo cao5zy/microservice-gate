@@ -31,5 +31,18 @@ server {
        	     access_log logs/signin.access.log;
        	     allow	   all;
        }
+       location /test_html {
+             include       mime.types;
+             default_type  application/octet-stream;
+	     sendfile        on;
+	     keepalive_timeout  65;
+
+             gzip on;
+             gzip_types text/plain application/x-javascript text/css application/xml text/javascript application/javascript image/jpeg image/gif image/png;
+	     gzip_vary on;
+
+             root /test_html;
+             index index.html;
+       }
 
 }
