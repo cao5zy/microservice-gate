@@ -12,34 +12,33 @@ ngx.req.read_body();
 
 
 local function validate(token)
-      local conn = mongo:new()
-      err, ok = conn:connect(ngx.var.auth_db, ngx.var.auth_db_port)
-
-      if err then
-      	 ngx.log(ngx.ERR, err)
+      if token == nil then
+          return false
       end
       
-      if ok then
-      	 ngx.log(ngx.ERR, ok)
-      end
+      local conn = mongo:new()
+      ok, err = conn:connect(ngx.var.auth_db, ngx.var.auth_db_port)
 
+      if ok ~= 1 then
+         ngx.log(ngx.ERR, 'connect error'..'err:'..err)
+      end
+      
+      ngx.log(ngx.ERR, 'validate token:'..token)
       local db = conn:new_db_handle("authdb")
       local r = db:auth("","")
       local col = db:get_col("tokens")
-      local token = col:find_one({token=token})
+      local rs = col:find_one({token=token})
 
-      if token then
+      if rs then
         return true
       else
         return false
       end
 end
 
-if util.header_args("name") then
-  ngx.log(ngx.ERR, "header name---"..header_args("name"))
-end
-
 if not validate(util.header_args("token")) then
   ngx.status = ngx.HTTP_UNAUTHORIZED
   ngx.send_headers()
+else
+  ngx.log(ngx.ERR, '200')
 end

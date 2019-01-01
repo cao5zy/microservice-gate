@@ -34,13 +34,42 @@
 
 - debug: var=signin.content
 
-- name: test validation
+- set_fact: token="{{signin.content}}"
+
+- debug: var=token
+
+- name: test validation with token
   uri:
     url: "{{login_service_test_url}}/test_html/index.html"
     method: GET
     return_content: yes
     status_code: 200
+    headers:
+      token: "{{token}}"
+  register: test_val1
+
+- debug: var=test_val1.content
+
+- name: test validation without token
+  uri:
+    url: "{{login_service_test_url}}/test_html/index.html"
+    method: GET
+    return_content: yes
+    status_code: 401
   register: test_val
 
 - debug: var=test_val.content
+
+- name: test validation wrong token
+  uri:
+    url: "{{login_service_test_url}}/test_html/index.html"
+    method: GET
+    return_content: yes
+    status_code: 401
+    headers:
+      token: 456ewew
+  register: test_val2
+
+- debug: var=test_val2.content
+
 ...

@@ -44,6 +44,12 @@ server {
              root /lua_app;
              index index.html;
 
+             resolver	{{auth_db_ip}} valid=30s;
+             set 	$auth_db {{auth_db_ip}};
+       	     set 	$auth_db_port {{auth_db_port}};
+
+       	     rewrite_by_lua_file		/lua_app/access.lua;
+
              error_log logs/test_html.error.log debug;
        	     access_log logs/test_html.access.log;
        	     allow	   all;
