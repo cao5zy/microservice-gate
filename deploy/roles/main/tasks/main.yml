@@ -1,66 +1,66 @@
 ---
 - name: init login service deploy folder
   file:
-    path: "{{login_service_root}}"
+    path: "{{microservice_root}}"
     state: directory
 
 - name: copy files from src to deploy folder
   synchronize:
     src: "./src/"
-    dest: "{{login_service_root}}"
+    dest: "{{microservice_root}}"
     checksum: no
     
 - name: init login service image file folder
   file:
-    path: "{{login_service_image_path}}"
+    path: "{{microservice_image_path}}"
     state: directory
 
 
 - name: copy the image file from local
   template:
     src: "Dockerfile.template"
-    dest: "{{login_service_image_path}}/Dockerfile"
+    dest: "{{microservice_image_path}}/Dockerfile"
 
 - name: copy the nginx conf file from local
   copy:
     src: "nginx.conf"
-    dest: "{{login_service_image_path}}"
+    dest: "{{microservice_image_path}}"
 
 - name: copy the lua-resty-mongo module to the image path
   synchronize:
     src: "./lua-resty-mongol"
-    dest: "{{login_service_image_path}}"
+    dest: "{{microservice_image_path}}"
     
-- name: build the login_service image
+- name: build the microservice image
   docker_image:
-    name: "{{login_service_image_name}}"
-    path: "{{login_service_image_path}}"
+    name: "{{microservice_image_name}}"
+    path: "{{microservice_image_path}}"
 
 - name: init logs folder 
   file:
-    path: "{{login_service_root}}/logs"
+    path: "{{microservice_root}}/logs"
     state: directory
 
 - name: init conf folder 
   file:
-    path: "{{login_service_root}}/conf.d"
+    path: "{{microservice_root}}/conf.d"
     state: directory
 
 - name: configure nginx
   template:
     src: login.conf.template
-    dest: "{{login_service_root}}/conf.d/login.conf"
+    dest: "{{microservice_root}}/conf.d/login.conf"
 
 - name: deploy the nginx server
   docker_container:
-    name: "{{login_service}}"
-    image: "{{login_service_image_name}}:latest"
+    name: "{{microservice}}"
+    image: "{{microservice_image_name}}:latest"
     ports:
       - "{{public_port}}:{{public_port}}"
     restart: yes
     volumes:
-      - "{{login_service_root}}:/lua_app:Z"
-      - "{{login_service_root}}/logs:/usr/local/openresty/nginx/logs:Z"
-      - "{{login_service_root}}/conf.d:/usr/local/openresty/nginx/conf.d:Z"
+      - "{{microservice_root}}:/lua_app:Z"
+      - "{{microservice_root}}/logs:/usr/local/openresty/nginx/logs:Z"
+      - "{{microservice_root}}/conf.d:/usr/local/openresty/nginx/conf.d:Z"
 
 ...

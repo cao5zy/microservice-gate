@@ -6,7 +6,7 @@
     
 - name: sign up test
   uri:
-    url: "{{login_service_test_url}}/signup"
+    url: "{{microservice_test_url}}/signup"
     method: POST
     body_format: json
     return_content: yes
@@ -21,7 +21,7 @@
 
 - name: sign in test
   uri:
-    url: "{{login_service_test_url}}/signin"
+    url: "{{microservice_test_url}}/signin"
     method: GET
     body_format: json
     return_content: yes
@@ -40,7 +40,7 @@
 
 - name: test validation with token
   uri:
-    url: "{{login_service_test_url}}/test_html/index.html"
+    url: "{{microservice_test_url}}/test_html/index.html"
     method: GET
     return_content: yes
     status_code: 200
@@ -52,7 +52,7 @@
 
 - name: test validation without token
   uri:
-    url: "{{login_service_test_url}}/test_html/index.html"
+    url: "{{microservice_test_url}}/test_html/index.html"
     method: GET
     return_content: yes
     status_code: 401
@@ -62,7 +62,7 @@
 
 - name: test validation wrong token
   uri:
-    url: "{{login_service_test_url}}/test_html/index.html"
+    url: "{{microservice_test_url}}/test_html/index.html"
     method: GET
     return_content: yes
     status_code: 401

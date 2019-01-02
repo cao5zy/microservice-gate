@@ -1,6 +1,6 @@
 server {
        listen				{{public_port}};
-       server_name				{{login_service}};
+       server_name				{{microservice}};
        access_log				logs/access.log;
 
 

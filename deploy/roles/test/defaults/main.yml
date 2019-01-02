@@ -1,5 +1,5 @@
 ---
 
-login_service_test_url: "http://{{public_host}}:{{public_port}}"
+microservice_test_url: "http://{{public_host}}:{{public_port}}"
 
 ...
