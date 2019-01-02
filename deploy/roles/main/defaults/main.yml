@@ -2,6 +2,6 @@
 public_prefix: ""
 public_port: 9005
 public_host: "130.175.64.6"
-microservice_image_rebuild: "false"
-microservice_debug: "true"
+microservice_gate_image_rebuild: "false"
+microservice_gate_debug: "true"
 ...

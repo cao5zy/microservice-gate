@@ -1,5 +1,5 @@
 ---
 
-microservice_test_url: "http://{{public_host}}:{{public_port}}"
+microservice_gate_test_url: "http://{{public_host}}:{{public_port}}"
 
 ...
