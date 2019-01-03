@@ -14,3 +14,6 @@ RUN rm -rf /${LUAMG_DOWNLOAD}
 
 COPY ./nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 
+RUN mkdir /lua_app
+COPY ./src/ /lua_app
+
