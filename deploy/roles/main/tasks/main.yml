@@ -4,12 +4,6 @@
     path: "{{microservice_gate_root}}"
     state: directory
 
-- name: copy files from src to deploy folder
-  synchronize:
-    src: "./src/"
-    dest: "{{microservice_gate_root}}"
-    checksum: no
-    
 - name: init login service image file folder
   file:
     path: "{{microservice_gate_image_path}}"
@@ -64,7 +58,6 @@
       - "{{public_port}}:{{public_port}}"
     restart: yes
     volumes:
-      - "{{microservice_gate_root}}:/lua_app:Z"
       - "{{microservice_gate_root}}/logs:/usr/local/openresty/nginx/logs:Z"
       - "{{microservice_gate_root}}/conf.d:/usr/local/openresty/nginx/conf.d:Z"
 
