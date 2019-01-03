@@ -30,6 +30,11 @@
   synchronize:
     src: "./lua-resty-mongol"
     dest: "{{microservice_gate_image_path}}"
+
+- name: copy the validation code to the image path
+  synchronize:
+    src: "./src/"
+    dest: "{{microservice_gate_image_path}}/src"
     
 - name: build the microservice_gate image
   docker_image:
