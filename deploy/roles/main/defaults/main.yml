@@ -1,5 +1,8 @@
 ---
 public_prefix: ""
 public_port: 9005
-public_host: "130.175.64.6"
+public_host: ""
+microservice_gate_image_name: "microservice_gate"
+microservice_gate_image_git_version: "1.0.0"
+
 ...
