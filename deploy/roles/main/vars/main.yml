@@ -1,6 +1,5 @@
 openresty_image_name: "alancao/openresty:1.0"
-microservice_gate: "{{public_prefix}}microservice_gate"
-microservice_gate_image_name: "microservice_gate_image"
+microservice_gate_image_name: "microservice_gate"
 microservice_gate_image_git_version: "1.0.0"
-microservice_gate_root: ".microservice_gate"
-microservice_gate_image_path: "{{microservice_gate_root}}/.image"
+microservice_gate_image_path: "/.microservice_gate_image"
+

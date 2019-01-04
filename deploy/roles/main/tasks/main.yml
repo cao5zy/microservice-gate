@@ -1,5 +1,5 @@
 ---
-- name: init login service image file folder
+- name: init microservice image file folder
   file:
     path: "{{microservice_gate_image_path}}"
     state: directory
