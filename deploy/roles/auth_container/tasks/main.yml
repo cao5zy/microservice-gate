@@ -23,7 +23,7 @@
 - name: deploy the nginx server
   docker_container:
     name: "{{microservice_gate}}"
-    image: "{{microservice_gate_image_name}}:latest"
+    image: "{{microservice_gate_image_name}}:{{microservice_gate_image_git_version}}"
     ports:
       - "{{public_port}}:{{public_port}}"
     restart: yes

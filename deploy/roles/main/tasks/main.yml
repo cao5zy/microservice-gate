@@ -27,6 +27,7 @@
 - name: build the microservice_gate image
   docker_image:
     name: "{{microservice_gate_image_name}}"
+    tag: "{{microservice_gate_image_git_version}}"
     path: "{{microservice_gate_image_path}}"
 
 ...
