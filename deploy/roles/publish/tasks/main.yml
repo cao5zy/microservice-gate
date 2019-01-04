@@ -1,0 +1,9 @@
+---
+
+- name: publish microservice gate image
+  docker_image:
+    name: "{{microservice_gate_image_name}}"
+    tag: "{{microservice_gate_image_git_version}}"
+    push: yes
+    repository: "{{login}}/{{repository}}"
+...
