@@ -22,7 +22,7 @@
 - name: sign in test
   uri:
     url: "{{microservice_gate_test_url}}/signin"
-    method: GET
+    method: POST
     body_format: json
     return_content: yes
     status_code: 200
