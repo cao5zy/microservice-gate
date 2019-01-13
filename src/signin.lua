@@ -46,6 +46,13 @@ local function signin(name, pwd)
 
 end
 
-ngx.status = 200
-ngx.print(signin(util.post_args('name'), util.getsha(util.post_args('pwd'))))
-ngx.exit(200)
+local token = signin(util.post_args('name'), util.getsha(util.post_args('pwd')))
+
+if token then
+  ngx.status = 201
+  ngx.print(token)
+  ngx.exit(201)
+else
+  ngx.status = 401
+  ngx.exit(401)
+end

@@ -19,13 +19,25 @@
 
 - debug: var=signup.content
 
-- name: sign in test
+- name: sign in test without correct username and pwd
   uri:
     url: "{{microservice_gate_test_url}}/signin"
     method: POST
     body_format: json
     return_content: yes
-    status_code: 200
+    status_code: 401
+    body: {
+      "name": "{{user_name}}",
+      "pwd": "1234456"
+    }
+    
+- name: sign in test with correct username and pwd
+  uri:
+    url: "{{microservice_gate_test_url}}/signin"
+    method: POST
+    body_format: json
+    return_content: yes
+    status_code: 201
     body: {
       "name": "{{user_name}}",
       "pwd": "{{pwd}}"
